@@ -1,9 +1,19 @@
 def collatz_steps(n, step=0):
-    return step if n == 1 else collatz_steps(n / 2, step + 1) if n % 2 == 0 else collatz_steps(n * 3 + 1, step + 1)
+    while n != 1:
+        if n % 2 == 0:
+            n /= 2
+        else:
+            n = n * 3 + 1
+        step += 1
+    return step
 
 
 assert collatz_steps(16) == 4
 assert collatz_steps(12) == 9
 assert collatz_steps(27) == 111
 assert collatz_steps(1000) == 111
-assert collatz_steps(10000) == 29
+assert collatz_steps(100000000000000000000000000000000000000000000000000000000000000000000000000000000000000) == 1325
+
+print(collatz_steps(16))
+print(collatz_steps(12))
+print(collatz_steps(27))

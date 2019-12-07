@@ -6,10 +6,13 @@ def any_foo(*args, **kwargs):
 
 
 def modified_func(func, *fixated_args, **fixated_kwargs):
+    args_in_doc = fixated_args
+    kwargs_in_doc = fixated_kwargs
+
     def inner(*args, **kwargs):
+        global args_in_doc
+        global kwargs_in_doc
         new_args = ()
-        args_in_doc = None
-        kwargs_in_doc = None
         if args:
             new_args = fixated_args + args
         if kwargs:
@@ -17,19 +20,15 @@ def modified_func(func, *fixated_args, **fixated_kwargs):
         frame = inspect.currentframe()
         values = inspect.getargvalues(frame)
         if "new_args" in values[3]:
-            if args_in_doc is None:
-                args_in_doc = values[3].get("new_args")
+            args_in_doc = values[3].get("new_args")
         if "fixated_kwargs" in values[3]:
-            if kwargs_in_doc is None:
-                kwargs_in_doc = values[3].get("fixated_kwargs")
-
-        inner.__name__ = "func_{}".format(func.__name__)
-        inner.__doc__ = """A func implementation of {} with pre-applied arguments being: \n\nargs: {}, kwargs {} 
-        \nsource_code:\n{}""".format(
-            inner.__name__, args_in_doc, kwargs_in_doc, inspect.getsource(func)
-        )
+            kwargs_in_doc = values[3].get("fixated_kwargs")
         return func(*new_args, **fixated_kwargs)
 
+    inner.__name__ = "func_{}".format(func.__name__)
+    inner.__doc__ = """A func implementation of {} with pre-applied arguments being: \n\nargs: {}, kwargs {} 
+            \nsource_code:\n{}""".format(
+        inner.__name__, args_in_doc, kwargs_in_doc, inspect.getsource(func))
     return inner
 
 
