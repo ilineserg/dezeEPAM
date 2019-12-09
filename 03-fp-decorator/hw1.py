@@ -21,9 +21,8 @@ def problem6():
     Return a difference between
     the sum of the squares of the first one hundred natural numbers and
     the square of the sum
-    Result 25164150
     """
-    return (lambda x, y: x - y ** 2)([sum(x) for x in zip(*[(i, i**2) for i in range(1, 101)])])
+    return (lambda a: a[0] ** 2 - a[1])(tuple(sum(x) for x in zip(*[(i, i**2) for i in range(1, 101)])))
 
 
 def problem48(last_term=1000, last_digits=10):
@@ -31,8 +30,7 @@ def problem48(last_term=1000, last_digits=10):
     Return last ten(last_digits) digits of the series 1**1 + 2**2 + 3**3 + ... + last_term**last_term.
 
     """
-    return str(sum([i ** i for i in range(1, last_term + 1)]))[-last_digits::], \
-           str(sum(map(lambda x: x ** x, range(1, last_term + 1))))[-last_digits::]
+    return str(sum([i ** i for i in range(1, last_term + 1)]))[-last_digits::]
 
 
 def problem40(max_length=1000000, indexes=(1, 10, 100, 1000, 10000, 100000, 1000000)):
