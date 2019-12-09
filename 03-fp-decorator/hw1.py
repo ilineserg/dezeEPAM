@@ -23,7 +23,7 @@ def problem6():
     the square of the sum
     Result 25164150
     """
-    return [sum(x) for x in zip(*[(i, i**2) for i in range(1, 101)])]
+    return (lambda x, y: x - y ** 2)([sum(x) for x in zip(*[(i, i**2) for i in range(1, 101)])])
 
 
 def problem48(last_term=1000, last_digits=10):
