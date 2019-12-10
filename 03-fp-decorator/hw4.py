@@ -1,14 +1,16 @@
-def applydecorator(f_saymyname):
-    def wrapper(f_foo):
+def applydecorator(decorator_func):
+    def wrapper(applied_func):
         def inner(*args, **kwargs):
-            return f_saymyname(f_foo, *args, **kwargs)
+            return decorator_func(applied_func, *args, **kwargs)
+
         return inner
+
     return wrapper
 
 
 @applydecorator
 def saymyname(f, *args, **kwargs):
-    print('Name is', f.__name__)
+    print("Name is", f.__name__)
     return f(*args, **kwargs)
 
 
