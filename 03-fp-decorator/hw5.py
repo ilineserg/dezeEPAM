@@ -54,7 +54,8 @@ def fib_4(n):
 
 def pow(x, n, I, mult):
     """
-    Returns x ** n. Suggests that I is unit matrix, which is multiplied with mult and n is positive number.
+    Returns x ** n. Suggests that I is unit matrix, 
+    which is multiplied with mult and n is positive number.
     """
     if n == 0:
         return I
