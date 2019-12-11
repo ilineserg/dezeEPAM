@@ -4,19 +4,17 @@ import time
 
 
 c = Counter()
-b = Counter()
 
 
 def profiling_decorator(counter):
     def time_decorator(f):
         def wrapper(*args, **kwargs):
-            start = time.clock()
-            f(*args, **kwargs)
-            stop = time.clock()
-            current_time = stop - start
-            counter['count_' + f.__name__] += 1
-            counter['full_time_' + f.__name__] += current_time
-            return f(*args, **kwargs)
+            start = time.time()
+            res = f(*args, **kwargs)
+            stop = time.time()
+            counter[(f.__name__, 'count')] += 1
+            counter[(f.__name__, 'full_time')] += stop - start
+            return res
         return wrapper
     return time_decorator
 
@@ -49,15 +47,14 @@ def fib_3(n):
 def fib_4(n):
     a = 0
     b = 1
-    for __ in range(n):
+    for _ in range(n):
         a, b = b, a + b
     return a
 
 
 def pow(x, n, I, mult):
     """
-    Возвращает x в степени n. Предполагает, что I – это единичная матрица, которая
-    перемножается с mult, а n – положительное целое
+    Returns x ** n. Suggests that I is unit matrix, which is multiplied with mult and n is positive number.
     """
     if n == 0:
         return I
@@ -72,7 +69,7 @@ def pow(x, n, I, mult):
 
 
 def identity_matrix(n):
-    """Возвращает единичную матрицу n на n"""
+    """Returns unit matrix n * n"""
     r = list(range(n))
     return [[1 if i == j else 0 for i in r] for j in r]
 
@@ -80,7 +77,7 @@ def identity_matrix(n):
 def matrix_multiply(A, B):
     BT = list(zip(*B))
     return [[sum(a * b
-                 for a, b in zip(row_a, col_b))
+            for a, b in zip(row_a, col_b))
             for col_b in BT]
             for row_a in A]
 
@@ -91,31 +88,22 @@ def fib_5(n):
     return F[0][1]
 
 
-print('fib_1')
-print(fib_1(15))
-print('Times to start', c['count_fib_1'])
-print('Time to run', round(c['full_time_fib_1'], 10))
+def optimal_fibonacci():
+    result = None
+    temp = 0
+    for i in c:
+        if i[1] == 'full_time':
+            temp = c.get(i)
+            if result is None or temp < result[1]:
+                result = (i, temp)
+    return f'Optimal function Fibonacci by time is: {result[0][0]}.\nFunction runs for: {result[1]} sec.'
 
 
-print('\nfib_2')
-print(fib_2(15))
-print('Times to start', c['count_fib_2'])
-print('Time to run', round(c['full_time_fib_2'], 10))
-
-
-print('\nfib_3')
-print(fib_3(15))
-print('Times to start', c['count_fib_3'])
-print('Time to run', round(c['full_time_fib_3'], 10))
-
-print('\nfib_4')
-print(fib_4(15))
-print('Times to start', c['count_fib_4'])
-print('Time to run', round(c['full_time_fib_4'], 10))
-
-print('\nfib_5')
-print(fib_5(15))
-print('Times to start', c['count_fib_5'])
-print('Time to run', round(c['full_time_fib_5'], 10))
-
-print(c)
+if __name__ == '__main__':
+    n = 15
+    fib_1(n)
+    fib_2(n)
+    fib_3(n)
+    fib_4(n)
+    fib_5(n)
+    print(optimal_fibonacci())
