@@ -1,20 +1,24 @@
 import functools
 
 
-def save_original_info(func):
-    setattr(func, '__name__', func.__name__)
-    setattr(func, '__doc__', func.__doc__)
-    setattr(func, '__original_func', func)
-    return func
+def save_original_info(funk):
+    def inner(func):
+        @functools.wraps(funk)
+        def wrapper(*args, **kwargs):
+            setattr(wrapper, '__original_func', func)
+            return func(*args, **kwargs)
+        return wrapper
+    return inner
 
 
 def print_result(func):
-    @save_original_info
+    @save_original_info(func)
     def wrapper(*args, **kwargs):
         """Function-wrapper which print result of an original function"""
         result = func(*args, **kwargs)
         print(result)
         return result
+
     return wrapper
 
 
