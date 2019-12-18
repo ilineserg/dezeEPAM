@@ -1,21 +1,36 @@
-import functools
+"""
+Написать декоратор instances_counter, который применяется к любому классу
+и добавляет ему 2 метода:
+get_created_instances - возвращает количество созданых экземпляров класса
+reset_instances_counter - сбросить счетчик экземпляров,
+возвращает значение до сброса
+Имя декоратора и методов не менять
+
+Ниже пример использования
+"""
 
 
 def instances_counter(cls):
-    cls.instance = 0
+    setattr(cls, 'instance', 0)
+
+    def __init__(self):
+        cls.instance += 1
 
     @staticmethod
     def get_created_instances():
         return cls.instance
 
-    def reset_instances_counter(cls):
+    @staticmethod
+    def reset_instances_counter():
+        temp = cls.instance
         cls.instance = 0
-        return cls.instance
+        return temp
 
-    get_created_instances = get_created_instances
+    setattr(cls, '__init__', __init__)
+    setattr(cls, 'get_created_instances', get_created_instances)
+    setattr(cls, 'reset_instances_counter', reset_instances_counter)
 
     return cls
-
 
 
 @instances_counter
@@ -24,12 +39,6 @@ class User:
 
 
 if __name__ == '__main__':
-
-    one = User()
-    print(type(one))
-    print(one.instance)
-    two = User()
-    print(two.instance)
 
     User.get_created_instances()  # 0
     user, _, _ = User(), User(), User()
