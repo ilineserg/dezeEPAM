@@ -21,8 +21,8 @@ def count_nucleotides(dna):
 
 def translate_rna_to_protein(rna, protein_map):
     """your code here"""
-    if rna is None:
-        protein = "".join([protein_map[el] for el in rna])
+    rna_list = [rna[x:x+3] for x in range(0, len(rna), 3)]
+    protein = "".join([protein_map[el] for el in rna_list if len(el) == 3])
     return protein
 
 
@@ -52,18 +52,22 @@ if __name__ == '__main__':
                 if index % 2 == 0:
                     rna_codon_dict.update({item: line[index + 1]})
 
+    with open('statistics_of_nucleotid.txt', 'w') as statistics:
+        for gen in dna:
+            statistics.write('Count of: ' + gen.name + '\n')
+            statistics.write(', '.join(count_nucleotides(gen.dna_code)) + '\n')
 
-    for gen in dna:
-        print('Count of: ' + gen.name)
-        print(', '.join(count_nucleotides(gen.dna_code)))
+    with open('rna.txt', 'w') as rna_file:
+        for gen in dna:
+            rna_file.write('RNA code of: ' + gen.name + '\n')
+            rna = translate_from_dna_to_rna(gen.dna_code)
+            rna_file.write(rna + '\n')
 
-    for gen in dna:
-        print('RNA code of: ' + gen.name)
-        print(translate_from_dna_to_rna(gen.dna_code))
-
-    for gen in dna:
-        print('RNK to protein for: ' + gen.name)
-        print(translate_from_dna_to_rna(gen.dna_code, rna_codon_dict))
+    with open('protein.txt', 'w') as protein_file:
+        for gen in dna:
+            protein_file.write('RNA to protein for: ' + gen.name + '\n')
+            rna = translate_from_dna_to_rna(gen.dna_code)
+            protein_file.write(translate_rna_to_protein(rna, rna_codon_dict) + '\n')
 
 
 

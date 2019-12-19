@@ -23,11 +23,13 @@ import functools
 def save_original_info(original_func):
     def inner_decorator(func):
         def wrapper(*args, **kwargs):
-            wrapper.__name__ = original_func.__name__
-            wrapper.__doc__ = original_func.__doc__
-            setattr(wrapper, '__original_func', original_func)
             return func(*args, **kwargs)
+
+        wrapper.__name__ = original_func.__name__
+        wrapper.__doc__ = original_func.__doc__
+        wrapper.__original_func = original_func
         return wrapper
+
     return inner_decorator
 
 
@@ -48,7 +50,7 @@ def custom_sum(*args):
     return functools.reduce(lambda x, y: x + y, args)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     custom_sum([1, 2, 3], [4, 5])
     custom_sum(1, 2, 3, 4)
 
