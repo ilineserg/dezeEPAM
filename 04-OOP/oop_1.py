@@ -73,7 +73,7 @@ class Homework:
 
     @property
     def is_active(self):
-        return datetime.datetime.now() > self.created + self.deadline
+        return datetime.datetime.now() < self.created + self.deadline
 
 
 if __name__ == '__main__':
