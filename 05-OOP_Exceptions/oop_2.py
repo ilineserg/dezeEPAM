@@ -15,10 +15,6 @@ HomeworkResult принимает объект автора задания, пр
     подходящие по смыслу исключение с сообщением:
     'You gave a not Homework object'
 
-2. Если задание уже просрочено хотелось бы видеть исключение при do_homework,
-а не просто принт 'You are late'.
-Поднимайте исключение DeadlineError с сообщением 'You are late' вместо print.
-
 4.
 Teacher
 Атрибут:
@@ -51,15 +47,11 @@ class Human:
     def __init__(self, last_name, first_name):
         self.first_name = first_name
         self.last_name = last_name
-        print(first_name, last_name, 'create')
 
 
 class Student(Human):
 
     def do_homework(self, homework, solution):
-        print('Homework', homework)
-        print('Solution', solution)
-        print('Author', self)
         if homework.is_active is True:
             return HomeworkResult(homework, solution, author=self)
         else:
@@ -72,7 +64,6 @@ class Teacher(Human):
 
     @staticmethod
     def create_homework(text, deadline):
-        print('Homework', text, 'Create')
         return Homework(text, deadline)
 
     @staticmethod
@@ -81,7 +72,6 @@ class Teacher(Human):
             Teacher.homework_done[homework_result.homework].append(homework_result)
             return True
         else:
-            print('bad boy ', homework_result.author.first_name)
             return False
 
     @staticmethod
@@ -107,11 +97,12 @@ class Homework:
 class HomeworkResult:
 
     def __init__(self, homework, solution, author):
+        if not isinstance(homework, Homework):
+            raise ValueError
         self.homework = homework
         self.solution = solution
         self.author = author
         self.created = homework.created
-        print('HW RESULT from: ', self.author, 'is: ', self.solution, 'HW CREATED: ', self.created)
 
 
 class DeadlineError(Exception):
@@ -127,9 +118,6 @@ if __name__ == '__main__':
 
     oop_hw = opp_teacher.create_homework('Learn OOP', 1)
     docs_hw = opp_teacher.create_homework('Read docs', 5)
-
-    print(oop_hw.is_active)
-    print(docs_hw.is_active)
 
     result_1 = good_student.do_homework(oop_hw, 'I have done this hw')
     result_2 = good_student.do_homework(docs_hw, 'I have done this hw too')
@@ -149,8 +137,4 @@ if __name__ == '__main__':
     opp_teacher.check_homework(result_3)
 
     print(Teacher.homework_done[oop_hw])
-    print(Teacher.homework_done)
-    Teacher.reset_results(oop_hw)
-    print('WITHOUT OOP HW', Teacher.homework_done)
     Teacher.reset_results()
-    print(Teacher.homework_done)
