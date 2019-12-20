@@ -17,7 +17,7 @@ def problem9(number=1000):
         for m in range(math.ceil(math.sqrt(number // 2)))
         for n in range(1, m)
         if m * (m + n) == number // 2
-    ]
+    ][0]
 
 
 def problem6():
