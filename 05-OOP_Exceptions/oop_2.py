@@ -58,7 +58,7 @@ class Student(Person):
 
 class Teacher(Person):
 
-    homework_done = defaultdict(list)
+    homework_done = defaultdict(set)
 
     @staticmethod
     def create_homework(text, deadline):
@@ -67,7 +67,7 @@ class Teacher(Person):
     @staticmethod
     def check_homework(homework_result):
         if len(homework_result.solution) > 5:
-            Teacher.homework_done[homework_result.homework].append(homework_result)
+            Teacher.homework_done[homework_result.homework].add(homework_result)
             return True
         else:
             return False
