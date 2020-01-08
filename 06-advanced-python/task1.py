@@ -29,3 +29,6 @@ graph = Graph(E)
 
 for vertex in graph:
     print(vertex)
+
+for vertex in graph:
+    print(vertex)
