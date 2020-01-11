@@ -7,28 +7,42 @@ E - dict(<V> : [<V>, <V>, ...])
 """
 
 
-class Graph:
+class Graph(object):
+    _collection = []
 
-    visited = {}
+    def __init__(self, graph: dict):
+        _visited = set()
+        _temp = list(graph.keys())[:1]
 
-    def __init__(self, E):
-        self.E = E
-        self.visited = set()
-        self.childs = list(self.E.keys())[:1]
+        for item in _temp:
+            if item not in _visited:
+                _visited.add(item)
+                _temp.extend(graph.get(item, []))
+                self._collection.append(item)
 
     def __iter__(self):
-        for child in self.childs:
-            if child not in self.visited:
-                self.visited.add(child)
-                self.childs.extend(self.E.get(child, []))
-                yield child
+        return iter(self._collection)
+
+    def __getitem__(self, key):
+        return self._collection[key]
+
+    def __len__(self):
+        return len(self._collection)
 
 
-E = {'A': ['X', 'Y', 'Z'], 'B': ['C', 'D'], 'X': ['H', 'J'], 'Y': ['K', 'I']}
-graph = Graph(E)
+if __name__ == "__main__":
 
-for vertex in graph:
-    print(vertex)
+    E = {'A': ['B', 'D', 'X'], 'B': ['Y', 'C'], 'C': ['Z'], 'D': ['A']}
+    graph = Graph(E)
 
-for vertex in graph:
-    print(vertex)
+    for vertex in graph:
+        print(vertex)
+
+    print("*" * 3)
+
+    for vertex in graph:
+        print(vertex)
+
+    print("*" * 3)
+    print("Len:", len(graph))
+    print("graph[3]:", graph[3])
