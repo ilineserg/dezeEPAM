@@ -8,17 +8,19 @@ E - dict(<V> : [<V>, <V>, ...])
 
 
 class Graph(object):
-    _collection = []
+    _collection = None
 
     def __init__(self, graph: dict):
+        self._collection = []
         _visited = set()
         _temp = list(graph.keys())[:1]
 
         for item in _temp:
-            if item not in _visited:
-                _visited.add(item)
-                _temp.extend(graph.get(item, []))
-                self._collection.append(item)
+            if item in _visited:
+                continue
+            _visited.add(item)
+            _temp.extend(graph.get(item, []))
+            self._collection.append(item)
 
     def __iter__(self):
         return iter(self._collection)
@@ -32,17 +34,22 @@ class Graph(object):
 
 if __name__ == "__main__":
 
-    E = {'A': ['B', 'D', 'X'], 'B': ['Y', 'C'], 'C': ['Z'], 'D': ['A']}
-    graph = Graph(E)
+    E1 = {'A': ['B', 'C', 'D'], 'B': ['C'], 'C': [], 'D': ['A']}
+    E2 = {'B': ['C'], 'A': ['B', 'C', 'D'], 'C': [], 'D': ['A']}
 
-    for vertex in graph:
-        print(vertex)
+    graph1 = Graph(E1)
+    print("graph1:")
 
-    print("*" * 3)
+    for i in graph1:
+        print(i)
 
-    for vertex in graph:
-        print(vertex)
+    graph2 = Graph(E2)
+    print("graph2:")
 
-    print("*" * 3)
-    print("Len:", len(graph))
-    print("graph[3]:", graph[3])
+    for i in graph2:
+        print(i)
+
+    print("zip:")
+
+    for i, j in zip(graph1, graph2):
+        print(i, j)
