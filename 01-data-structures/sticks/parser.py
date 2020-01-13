@@ -293,7 +293,7 @@ if __name__ == "__main__":
     total_statistics, variety_statistics = get_statistics(wines_data)
 
     selected_varieties = [
-        "Gew[üu]rztraminer", "Riesling", "Merlot",
+        "Gew\\u00fcrztraminer", "Riesling", "Merlot",
         "Madera", "Tempranillo", "Red Blend"
     ]
 
