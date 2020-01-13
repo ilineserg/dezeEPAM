@@ -8,19 +8,19 @@ E - dict(<V> : [<V>, <V>, ...])
 
 
 class Graph(object):
-    _collection = None
 
     def __init__(self, graph: dict):
         self._collection = []
         _visited = set()
-        _temp = list(graph.keys())[:1]
 
-        for item in _temp:
-            if item in _visited:
-                continue
-            _visited.add(item)
-            _temp.extend(graph.get(item, []))
-            self._collection.append(item)
+        for vertex in graph.keys():
+            _temp = [vertex]
+            for item in _temp:
+                if item in _visited:
+                    continue
+                _visited.add(item)
+                _temp.extend(graph.get(item, []))
+                self._collection.append(item)
 
     def __iter__(self):
         return iter(self._collection)
